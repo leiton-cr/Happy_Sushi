@@ -1,0 +1,15 @@
+@hostname = http://localhost
+@port = 9000
+@host = {{hostname}}:{{port}}/api
+
+###
+GET {{host}}/ingredients
+
+###
+GET {{host}}/ingredients/1
+
+###
+GET {{host}}/ingredients/by_type/raoll
+
+###
+DELETE {{host}}/ingredients/1

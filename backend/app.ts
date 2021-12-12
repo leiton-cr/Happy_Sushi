@@ -1,7 +1,9 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
+require('dotenv').config();
+
+import ingredientsRoutes from './app/routers/Ingredients.routes';
 
 const app: Application = express();
 let port: String;
@@ -22,7 +24,6 @@ function startup() {
  * Intermediarios necesarios.
  */
 function middlewares() {
-  dotenv.config();
 
   app.use(morgan('dev'));
   app.use(express.json());
@@ -42,7 +43,7 @@ function launch() {
  */
 function routes() {
   indexRoute();
-  //app.use('/api/auth', authRoutes);
+  app.use('/api/Ingredients', ingredientsRoutes);
 
 
   // Si no accedió a ninguna ruta conocida
@@ -56,8 +57,6 @@ function routes() {
 function indexRoute() {
   app.get('/', function (req, res) {
     const index_path = (`${__dirname}/public/index.html`).replace(`\\dist`,'');
-    console.log(index_path);
-    
     res.sendFile(index_path);
   });
 }

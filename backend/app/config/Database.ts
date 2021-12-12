@@ -75,3 +75,5 @@ class Database {
     return Database.instance;
   }
 }
+
+export default Database;

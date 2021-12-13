@@ -8,28 +8,28 @@ class AuthController {
   // Metodo de obtencion de lista general
   async listAll(req: Request, res: Response) {
     const data: ServiceResult = await service.listAll();
-    res.status(data.status).json({ message: data.message, list: data.list });
+    res.status(data.status).json(data);
   }
 
   // Metodo de obtencion de lista por id
   async listById(req: Request, res: Response) {
     const { id } = req.params;
     const data: ServiceResult = await service.listById(parseInt(id, 10));
-    res.status(data.status).json({ message: data.message, item: data.item });
+    res.status(data.status).json(data);
   }
 
   // Metodo de obtencion de lista por id
   async listByType(req: Request, res: Response) {
     const { type } = req.params;
     const data: ServiceResult = await service.listByType(type);
-    res.status(data.status).json({ list: data.list });
+    res.status(data.status).json(data);
   }
 
   // Metodo de eliminacion por id
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     const data: ServiceResult = await service.delete(parseInt(id, 10));
-    res.status(data.status).json({ message: data.message });
+    res.status(data.status).json(data);
   }
 
   // Metodo de insercion de ingrediente
@@ -38,7 +38,7 @@ class AuthController {
     const picture:any  = req.files!.picture;
 
     const data: ServiceResult = await service.insert(name, type, picture.data);
-    res.status(data.status).json({ message: data.message });
+    res.status(data.status).json(data);
   }
 
     // Metodo de actualizacion de ingrediente
@@ -48,7 +48,7 @@ class AuthController {
       const picture:any  = req.files!.picture;
   
       const data: ServiceResult = await service.update(parseInt(id),name, type, picture.data);
-      res.status(data.status).json({ message: data.message });
+      res.status(data.status).json(data);
     }
 
 }

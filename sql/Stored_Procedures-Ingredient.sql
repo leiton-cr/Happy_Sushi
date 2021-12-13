@@ -82,9 +82,9 @@ CREATE OR ALTER PROCEDURE sp_ingredients_insert (
 
 AS
 	BEGIN
-		SET NOCOUNT ON;
 		INSERT INTO tb_ingredients ([name], [type], [picture]) 
 		VALUES (@name, @type, @picture);
+		RETURN SCOPE_IDENTITY();
 	END
 GO
 ---------------------------------------------------------
@@ -103,7 +103,6 @@ CREATE OR ALTER PROCEDURE sp_ingredients_update (
 )
 AS
 	BEGIN
-		SET NOCOUNT ON;
 		UPDATE tb_ingredients 
 		SET [name] = @name, [type] = @type, [picture] = @picture
 		WHERE [id] = @id;
@@ -122,9 +121,9 @@ CREATE OR ALTER PROCEDURE sp_ingredients_delete (
 )
 AS
 	BEGIN
-		SET NOCOUNT ON;
 		UPDATE tb_ingredients SET [state] = 0
-		WHERE [id] = @id;
+		WHERE [id] = @id
+		AND [state] = 1;
 	END
 GO
 --------------------------------------------------------------

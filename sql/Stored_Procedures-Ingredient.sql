@@ -9,6 +9,7 @@
 -- 04. sp_ingredients_insert
 -- 05. sp_ingredients_update
 -- 06. sp_ingredients_delete
+-- 07. sp_ingredients_update_pictureless
 -- =================================================
 
 GO
@@ -126,4 +127,24 @@ AS
 		AND [state] = 1;
 	END
 GO
---------------------------------------------------------------
+---------------------------------------------------------
+
+GO
+-- ====================================================
+-- 07. sp_ingredients_update_pictureless
+--
+-- Description:	<Actualizacion de un ingrediente sin imagen>
+-- ====================================================
+CREATE OR ALTER PROCEDURE sp_ingredients_update_pictureless (
+	@id TINYINT,
+	@name VARCHAR(25),
+	@type VARCHAR(4)
+)
+AS
+	BEGIN
+		UPDATE tb_ingredients 
+		SET [name] = @name, [type] = @type
+		WHERE [id] = @id;
+	END
+GO
+-------------------------------------------------------------

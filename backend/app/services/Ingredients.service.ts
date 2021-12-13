@@ -3,9 +3,9 @@ import sql, { MAX } from 'mssql';
 import AbstractService from "./Abstract.service";
 
 /**
-  *  Esta clase controla peticiones a DB 
-  *  relacionadas con tabla de Ingredientes
-  */
+ *  Esta clase controla peticiones a DB 
+ *  relacionadas con tabla de Ingredientes  
+ */
 class IngredientService extends AbstractService {
 
   public constructor() {
@@ -121,15 +121,16 @@ class IngredientService extends AbstractService {
 
   async update(id:number, name:String, type:String, picture:Buffer) {
    
-    const procedure: string = 'sp_ingredients_update';
-
+    const procedure = !!picture ? 'sp_ingredients_update' : 'sp_ingredients_update_pictureless';
+    
     const inputData: Array<DataField> = [
       { name: 'id', type: sql.TinyInt, data: id },
       { name: 'name', type: sql.VarChar(25), data: name },
       { name: 'type', type: sql.VarChar(4), data: type },
-      { name: 'picture', type: sql.VarBinary(MAX), data: picture },
     ]
 
+    if(!!picture) inputData.push({ name: 'picture', type: sql.VarBinary(MAX), data: picture });
+    
     const outputData = await this.db.obtainData(inputData, procedure);
 
     // Si no hay datos.

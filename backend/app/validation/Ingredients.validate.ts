@@ -40,7 +40,10 @@ class IngredientsValidate {
     if (verifyId(req)) return res.status(400).json({ message: errorMessages.id });
     if (verifyName(req)) return res.status(400).json({ message: errorMessages.name });
     if (verifyType(req)) return res.status(400).json({ message: errorMessages.type });
-    if (verifyPicture(req)) return res.status(400).json({ message: errorMessages.picture });
+    if (req.files) {
+      if (verifyPicture(req)) return res.status(400).json({ message: errorMessages.picture });
+    }
+    
     next();
   }
 }

@@ -45,9 +45,9 @@ class AuthController {
     async update(req: Request, res: Response) {
       const { id } = req.params;
       const { name, type } = req.body;
-      const picture:any  = req.files!.picture;
+      const picture:any  = req.files?.picture;
   
-      const data: ServiceResult = await service.update(parseInt(id),name, type, picture.data);
+      const data: ServiceResult = await service.update(parseInt(id),name, type, picture?.data);
       res.status(data.status).json(data);
     }
 

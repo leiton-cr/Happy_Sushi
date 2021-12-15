@@ -1,0 +1,22 @@
+<div class="card">
+
+  <div class="card__ribbon">
+    <span>{{ item.type | ingredientType }}</span>
+  </div>
+  
+  <div class="card__content"> 
+    <div class="card__image">
+      <img src="{{getImage(item.id)}}" id="img-{{item.id}}" appErrorImageIngredient/>
+    </div>
+   
+    <div class="card__title">
+      <span>{{ item.name }}</span>
+    </div>
+    
+    <div class="card__actions" *ngIf="editCard">
+      <i class="far fa-edit btn edit" title="Editar" (click)="onEdit(item.id)"></i> 
+      <i class="fas fa-trash-alt btn delete" title="Eliminar" (click)="onDelete(item.id)"></i>
+    </div>
+  </div>
+  
+</div>

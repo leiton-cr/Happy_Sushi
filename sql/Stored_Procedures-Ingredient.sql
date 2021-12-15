@@ -10,6 +10,8 @@
 -- 05. sp_ingredients_update
 -- 06. sp_ingredients_delete
 -- 07. sp_ingredients_update_pictureless
+-- 08. sp_ingredients_image_byId
+-- 09. sp_ingredients_list_byName
 -- =================================================
 
 GO
@@ -23,7 +25,7 @@ CREATE OR ALTER PROCEDURE sp_ingredients_list_all
 AS
 	BEGIN
 		SET NOCOUNT ON;
-		SELECT [id],[name],[picture] FROM tb_ingredients
+		SELECT [id],[name],[type] FROM tb_ingredients
 		WHERE [state] = 1
 	END
 GO
@@ -42,7 +44,7 @@ CREATE OR ALTER PROCEDURE sp_ingredients_list_byType (
 AS
 	BEGIN
 		SET NOCOUNT ON;
-		SELECT [id],[name],[picture] FROM tb_ingredients
+		SELECT [id],[name],[type] FROM tb_ingredients
 		WHERE [state] = 1 
 		AND [type] = @type
 	END
@@ -62,7 +64,7 @@ CREATE OR ALTER PROCEDURE sp_ingredients_list_byId (
 AS
 	BEGIN
 		SET NOCOUNT ON;
-		SELECT [id],[name],[picture] FROM tb_ingredients
+		SELECT [id],[name],[type] FROM tb_ingredients
 		WHERE [state] = 1 
 		AND [id] = @id
 	END
@@ -147,4 +149,42 @@ AS
 		WHERE [id] = @id;
 	END
 GO
--------------------------------------------------------------
+---------------------------------------------------------
+
+GO
+-- ====================================================
+-- 08. sp_ingredients_image_byId
+--
+-- Description:	<Obtencion de imagen por id>
+-- ====================================================
+CREATE OR ALTER PROCEDURE sp_ingredients_image_byId (
+	@id TINYINT
+)
+AS
+	BEGIN
+		SELECT [picture]
+		FROM tb_ingredients
+		WHERE [id] = @id;
+	END
+GO
+---------------------------------------------------------
+
+GO
+-- ====================================================
+-- 09. sp_ingredients_list_byName 
+--
+-- Description:	<Obtencion de ingrediente segun su nombre>
+-- ====================================================
+CREATE OR ALTER PROCEDURE sp_ingredients_list_byName (
+	@name VARCHAR(25)
+)
+
+AS
+	BEGIN
+		SET NOCOUNT ON;
+		SELECT [id],[name],[type] FROM tb_ingredients
+		WHERE [state] = 1 
+		AND [name] = @name 
+	END
+GO
+---------------------------------------------------------

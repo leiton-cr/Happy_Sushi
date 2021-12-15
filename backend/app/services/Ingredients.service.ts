@@ -50,6 +50,28 @@ class IngredientService extends AbstractService {
     }
     return this.result = { status: 400, message: 'El ingrediente no fue encontrado' }
   }
+  
+  async listByName(name:String) {
+   
+    const procedure: string = 'sp_ingredients_list_byName'
+
+    const inputData: Array<DataField> = [
+      { name: 'name', type: sql.VarChar(25), data: name }
+    ]
+
+    const outputData = await this.db.obtainData(inputData, procedure)
+    
+    // Si no hay datos.
+    if (!outputData) {
+      return this.result = { status: 500, message: 'Surgió un error al obtener el ingrediente' }
+    }
+ 
+    // Si hay datos.
+    if (outputData.recordset.length !== 0) {
+      return this.result = { status: 200, item: outputData.recordset[0] }
+    }
+    return this.result = { status: 400, message: 'El ingrediente no fue encontrado' }
+  }
 
   async listByType(type:String) {
    
@@ -144,6 +166,29 @@ class IngredientService extends AbstractService {
     }
     return this.result = { status: 400, message: `No se encontró el ingrediente a actualizar` }
   }
+
+  async imageById(id:Number) {
+   
+    const procedure: string = 'sp_ingredients_image_byId'
+
+    const inputData: Array<DataField> = [
+      { name: 'id', type: sql.TinyInt, data: id }
+    ]
+
+    const outputData = await this.db.obtainData(inputData, procedure)
+    
+    // Si no hay datos.
+    if (!outputData) {
+      return this.result = { status: 500, message: 'Surgió un error al obtener la imagen del ingrediente' }
+    }
+ 
+    // Si hay datos.
+    if (outputData.recordset.length !== 0) {
+      return this.result = { status: 200, item: `data:image/webp;base64,${ outputData.recordset[0].picture.toString('base64')}` }
+    }
+    return this.result = { status: 400, message: 'La imagen del ingrediente no fue encontrada' }
+  }
+
 
 }
 export default IngredientService;

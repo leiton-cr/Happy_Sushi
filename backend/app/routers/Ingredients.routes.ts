@@ -18,6 +18,12 @@ router.get('/', controller.listAll);
 // Obtiene el listado de los ingredientes por su tipo.
 router.get('/by_Type/:type', IngredientsValidate.validateByType, controller.listByType);
 
+// Obtiene el listado de los ingredientes por su nombre.
+router.get('/by_Name/:name', IngredientsValidate.validateByName, controller.listByName);
+
+// Obtiene la imagen de un ingrediente por su id.
+router.get('/images/:id', IngredientsValidate.validateById, controller.imageById);
+
 // Obtiene un ingrediente por su id.
 router.get('/:id', IngredientsValidate.validateById, controller.listById);
 

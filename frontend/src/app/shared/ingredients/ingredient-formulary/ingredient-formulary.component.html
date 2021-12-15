@@ -1,0 +1,68 @@
+<div class="form__container {{opened ? 'modal__appear': 'modal__disappear'}}">
+    
+  <form class="formulary" [formGroup]="form" (submit)="action === 'insert' ? prepareRegister() : prepareEdit()">
+      <i class="fas fa-window-close formulary__close" (click)='closeModal()'></i>
+      <div class="formulary__content">
+          
+          <div class="formulary__group">
+              <img appMissingIngredient [src]="imagePreview" alt="" class="formulary__image">
+              <input class="formulary__image__input" id="image" type="file" accept="image/png,image/jpg,image/jpeg,image/webp" (change)="loadPreview($event)" >
+              <label for="image" class="formulary__image__select">
+                  <i class="fas fa-cloud-upload-alt upload"></i>
+                  <span class="label"> {{imagePreview === '' ? 'Seleccionar' : 'Cambiar'}} </span>
+              </label>
+              <ng-container *ngTemplateOutlet="picture_error; context: {error: form.get('picture')?.errors}"></ng-container>
+
+          </div>
+  
+          <div class="formulary__group">
+              <input type="text" placeholder="." max="25" class="formulary__input" id='name' formControlName="name" >
+              <label for="name" class="name__label">Nombre</label>
+              <ng-container *ngTemplateOutlet="name_error; context: {error: form.get('name')?.errors}"></ng-container>
+          </div>
+  
+          <div class="formulary__group">
+              <select class="formulary__select" id='type' formControlName="type">
+                  <option value="">Tipo</option>
+                  <option value="roll">Rollo</option>
+                  <option value="dish">Platillo</option>
+                  <option value="both">Ambos</option>
+              </select>
+  
+              <ng-container *ngTemplateOutlet="type_error; context: {error: form.get('type')?.errors}"></ng-container>
+              
+          </div>
+
+          <button> {{action === 'insert' ? 'Registrar' : 'Modificar'}} </button>
+      </div>
+    
+  </form>
+</div>
+
+<ng-template #name_error let-error="error">
+    <ng-container *ngIf="form.get('name')?.dirty || form.get('name')?.touched">
+        <p class="error_input" *ngIf="error?.required"> El nombre es requerido </p> 
+        <p class="error_input" *ngIf="error?.repeated"> Este nombre ya está registrado</p> 
+        <p class="error_input" *ngIf="error?.pattern"> Solo se permiten letras </p>  
+        <p class="error_input" *ngIf="error?.minlength && !error?.pattern ">
+            Se requiere un minimo de {{error.minlength.requiredLength}} caracteres.
+        </p>
+        <p class="error_input" *ngIf="error?.maxlength && !error?.pattern">
+            Solo se permiten {{error.maxlength.requiredLength}} caracteres.
+        </p>
+    </ng-container>
+</ng-template>
+
+<ng-template #type_error let-error="error">
+    <ng-container *ngIf="form.get('type')?.dirty || form.get('type')?.touched">
+        <p class="error_input" *ngIf="error?.required"> El tipo es requerido </p>
+    </ng-container>
+</ng-template>
+
+<ng-template #picture_error let-error="error">
+    <ng-container *ngIf="form.get('picture')?.dirty || form.get('picture')?.touched">
+        <p class="image_error_input" *ngIf="error?.required && !error?.size && !error?.format"> La imagen es requerida. </p>
+        <p class="image_error_input" *ngIf="error?.size"> Solo archivos de 3mb o menos. </p>
+        <p class="image_error_input" *ngIf="error?.format"> Formatos JPG, JPEG, PNG o WEBP. </p>
+    </ng-container>
+</ng-template>

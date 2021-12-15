@@ -1,0 +1,39 @@
+<p>table works!</p>
+
+<table>
+
+  <thead>
+    <tr>
+      <th *ngFor="let header of headers">{{header}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of list" >
+      
+      <td>{{item.name}}</td>
+      <td>{{item.type}}</td>
+      <td><img [src]=" getImage(item.id) " alt="" width="300"></td>
+      
+    </tr>
+  </tbody>
+
+ 
+
+</table>
+
+
+<div class='card__container' >
+
+  <div class="card" *ngFor="let item of list">
+    <div class="card__content">
+      <div class="card__image">
+        <img [src]=" getImage(item.id) " alt="" width="300">
+      </div>
+      <div class="card__title">
+        <td>{{item.name}}</td>
+      </div>
+    </div>
+  </div>
+
+
+</div>

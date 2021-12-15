@@ -27,6 +27,12 @@ class IngredientsValidate {
     next();
   }
 
+    // Metodo de verificacion por nombre
+    static validateByName(req: Request, res: Response, next: NextFunction) {
+      if (verifyName(req)) return res.status(400).json({ message: errorMessages.name });
+      next();
+    }
+
   // Metodo de verificacion para parametros de insert
   static validateInsert(req: Request, res: Response, next: NextFunction) {
     if (verifyName(req)) return res.status(400).json({ message: errorMessages.name });
@@ -63,8 +69,8 @@ const idVerifications = (id: string): Array<Boolean> => [
 ];
 
 const verifyName = (req: Request) => {
-  const { name } = req.body;
- 
+  const { name } = !!req.body.name ? req.body : req.params;
+  
   if(!!!name) return true;
   return nameVerifications(name).some(element => !element);
 }
@@ -78,8 +84,8 @@ const nameVerifications = (name: string): Array<Boolean> => [
 ];
 
 const verifyType = (req: Request) => {
-  const { type } = req.body;
-  
+  const { type } = req.body.type ? req.body : req.params;
+
   if(!!!type) return true;
   return typeVerifications(type).some(element => !element);
 }

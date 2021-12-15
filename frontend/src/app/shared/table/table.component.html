@@ -1,0 +1,7 @@
+<button (click)="openModal(false)">Agregar</button>
+
+<div class='card__container' >
+    <edit-ingredient-card *ngFor="let item of list" [item]='item' [editCard]='true'></edit-ingredient-card>
+</div>
+
+<app-ingredient-formulary [opened]='opened' [modifyId]='modifyId' (closing)="openModal($event)" *ngIf="opened"></app-ingredient-formulary>

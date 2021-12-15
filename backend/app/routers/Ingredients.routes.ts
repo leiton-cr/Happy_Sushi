@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import fileUpload from 'express-fileupload';
-import AuthController from '../controllers/Ingredients.controller';
-import IngredientsValidate from '../validation/Ingredients.validate';
+import IngredientController from '../controllers/Ingredients.controller';
+import IngredientValidate from '../validation/Ingredients.validate';
 
 const router: Router = Router();
-const controller: AuthController = new AuthController();
+const controller: IngredientController = new IngredientController();
 
 // Permite la subida de archivos en el router.
 router.use(fileUpload({
@@ -16,24 +16,24 @@ router.use(fileUpload({
 router.get('/', controller.listAll);
 
 // Obtiene el listado de los ingredientes por su tipo.
-router.get('/by_Type/:type', IngredientsValidate.validateByType, controller.listByType);
+router.get('/by_Type/:type', IngredientValidate.validateByType, controller.listByType);
 
 // Obtiene el listado de los ingredientes por su nombre.
-router.get('/by_Name/:name', IngredientsValidate.validateByName, controller.listByName);
+router.get('/by_Name/:name', IngredientValidate.validateByName, controller.listByName);
 
 // Obtiene la imagen de un ingrediente por su id.
-router.get('/images/:id', IngredientsValidate.validateById, controller.imageById);
+router.get('/images/:id', IngredientValidate.validateById, controller.imageById);
 
 // Obtiene un ingrediente por su id.
-router.get('/:id', IngredientsValidate.validateById, controller.listById);
+router.get('/:id', IngredientValidate.validateById, controller.listById);
 
 // Ingresa un nuevo ingrediente.
-router.post('/', IngredientsValidate.validateInsert, controller.insert);
+router.post('/', IngredientValidate.validateInsert, controller.insert);
 
 // Actualiza los datos de un ingrediente.
-router.put('/:id', IngredientsValidate.validateUpdate, controller.update);
+router.put('/:id', IngredientValidate.validateUpdate, controller.update);
 
 // Elimina un ingrediente.
-router.delete('/:id', IngredientsValidate.validateById, controller.delete);
+router.delete('/:id', IngredientValidate.validateById, controller.delete);
 
 export default router;

@@ -4,6 +4,7 @@ import morgan from 'morgan';
 require('dotenv').config();
 
 import ingredientsRoutes from './app/routers/Ingredients.routes';
+import coveragesRoutes from './app/routers/Coverages.routes';
 
 const app: Application = express();
 let port: String;
@@ -44,7 +45,7 @@ function launch() {
 function routes() {
   indexRoute();
   app.use('/api/Ingredients', ingredientsRoutes);
-
+  app.use('/api/Coverages', coveragesRoutes);
 
   // Si no accedió a ninguna ruta conocida
   defaultRoute();

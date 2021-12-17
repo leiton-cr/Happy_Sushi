@@ -1,0 +1,10 @@
+<button (click)="openModal(false)">Agregar</button>
+
+<div class='card__container' >
+
+    <h2 *ngIf="list.length === 0"> La lista de coverturas está vacía. </h2>
+
+    <edit-coverage-card *ngFor="let item of list" [item]='item' [editCard]='true'></edit-coverage-card>
+</div>
+
+<app-coverage-formulary [opened]='opened' [modifyId]='modifyId' (closing)="openModal($event)" *ngIf="opened"></app-coverage-formulary>

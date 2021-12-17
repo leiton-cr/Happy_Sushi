@@ -29,7 +29,6 @@ class CoveragesValidate {
   // Metodo de verificacion para parametros de insert
   static validateInsert(req: Request, res: Response, next: NextFunction) {
     if (verifyName(req)) return res.status(400).json({ message: errorMessages.name });
-
     if (verifyPicture(req)) return res.status(400).json({ message: errorMessages.picture });
     next();
   }

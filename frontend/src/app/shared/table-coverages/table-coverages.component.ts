@@ -1,20 +1,20 @@
-import { Ingredient } from '@core/models/Ingredient';
-import { IngredientService } from '@core/services/Ingredient.service';
+import { Coverage } from '@core/models/Coverage';
+import { CoverageService } from '@core/services/Coverage.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  selector: 'app-table-coverages',
+  templateUrl: './table-coverages.component.html',
+  styleUrls: ['./table-coverages.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableCoveragesComponent implements OnInit {
 
   public opened: boolean;
-  public list: Array<Ingredient>;
+  public list: Array<Coverage>;
   public modifyId: number | undefined;
 
-  constructor(private service: IngredientService) {
-    this.opened = false;
+  constructor(private service: CoverageService) {
+    this.opened = false; 
     this.list = [];
   }
 
@@ -59,7 +59,10 @@ export class TableComponent implements OnInit {
 
   // Recibe variable de apertura de modal.
   openModal(closing: boolean) {
-      setTimeout(()=> this.opened = !closing,closing ? 400 : 0)
+    
+    // Si se cierra el modal se elimina el id de modificacion
+    if(closing) this.modifyId = 0
+    setTimeout(()=> this.opened = !closing,closing ? 400 : 0)
   }
 
   // Actualiza del listado el elemento actualizado.

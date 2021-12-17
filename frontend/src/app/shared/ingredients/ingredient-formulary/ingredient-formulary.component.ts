@@ -39,7 +39,9 @@ export class IngredientFormularyComponent extends ModalFormSkeleton implements O
   }
 
   ngOnInit(): void {
-    this.loadEditor();
+    if(this.modifyId !== 0){
+      this.loadEditor();
+    }
   }
 
   async prepareRegister() {

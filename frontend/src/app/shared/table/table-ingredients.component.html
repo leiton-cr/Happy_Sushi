@@ -1,6 +1,9 @@
 <button (click)="openModal(false)">Agregar</button>
 
 <div class='card__container' >
+
+    <h2 *ngIf="list.length === 0"> La lista de ingredientes está vacía. </h2>
+
     <edit-ingredient-card *ngFor="let item of list" [item]='item' [editCard]='true'></edit-ingredient-card>
 </div>
 

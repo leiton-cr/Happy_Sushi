@@ -5,6 +5,7 @@ require('dotenv').config();
 
 import ingredientsRoutes from './app/routers/Ingredients.routes';
 import coveragesRoutes from './app/routers/Coverages.routes';
+import dishesRoutes from './app/routers/Dishes.routes';
 
 const app: Application = express();
 let port: String;
@@ -46,6 +47,7 @@ function routes() {
   indexRoute();
   app.use('/api/Ingredients', ingredientsRoutes);
   app.use('/api/Coverages', coveragesRoutes);
+  app.use('/api/Dishes', dishesRoutes);
 
   // Si no accedió a ninguna ruta conocida
   defaultRoute();

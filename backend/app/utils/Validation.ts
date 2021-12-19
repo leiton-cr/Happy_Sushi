@@ -9,8 +9,8 @@ const SPECIAL_REGEX: RegExp = /[*%<>)(}{]/;
 const DIGIT_REGEX: RegExp = /^[0-9]+$/;
 const TEXT_REGEX: RegExp = /^[a-zA-Z ]+$/;
 
-const VALID_INGREDIENT_TYPES: Array<String> = ['both', 'roll', 'dish'];
 const VALID_MIMETYPES: Array<String> = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+const VALID_INGREDIENT_TYPES: Array<String> = ['both', 'roll', 'dish'];
 
 class Validation {
 
@@ -52,6 +52,19 @@ class Validation {
 
   // Esta función verifica que el tipo de dato sea permitido
   verifyImageType = (mimetype: string) => VALID_MIMETYPES.includes(mimetype);
+
+
+
+
+  // Esta función verifica que el tipo de dato sea permitido
+  verifyContentIngredients = (ingredients: string) => ingredients.split(',').length > 0;
+
+  // Esta función verifica que el tipo de dato sea permitido
+  verifyNumeralIngredients = (ingredients: string) => ! (ingredients.split(',').map( item => this.verifyNumber(item) ).includes(false));
+
+
+
+
 
 }
 

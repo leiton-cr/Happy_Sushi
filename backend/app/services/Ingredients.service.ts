@@ -111,7 +111,7 @@ class IngredientService extends AbstractService {
     }
     
     // Si hay datos.
-    if (outputData.rowsAffected[0] !== 0) {
+    if (outputData.rowsAffected[0] > 0) {
       return this.result = { status: 200, message: `Se eliminó correctamente el ingrediente '${id}'` }
     }
     return this.result = { status: 400, message: `No se encontró el ingrediente '${id}' a eliminar` }
@@ -135,7 +135,7 @@ class IngredientService extends AbstractService {
     }
  
     // Si hay datos.
-    if (outputData.rowsAffected[0] !== 0) {
+    if (outputData.rowsAffected[0] > 0) {
       return this.result = { status: 200, message: `Se insertó correctamente el ingrediente` }
     }
     return this.result = { status: 400, message: `No se insertó ingrediente` }
@@ -161,7 +161,7 @@ class IngredientService extends AbstractService {
     }
  
     // Si hay datos.
-    if (outputData.rowsAffected[0] !== 0) {
+    if (outputData.rowsAffected[0] > 0) {
       return this.result = { status: 200, message: `Se actualizó correctamente el ingrediente` }
     }
     return this.result = { status: 400, message: `No se encontró el ingrediente a actualizar` }

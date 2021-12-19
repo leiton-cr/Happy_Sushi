@@ -1,0 +1,12 @@
+@hostname = http://localhost
+@port = 9000
+@host = {{hostname}}:{{port}}/api
+
+###
+GET {{host}}/dishes
+
+###
+GET {{host}}/dishes/1
+
+###
+DELETE {{host}}/dishes/1

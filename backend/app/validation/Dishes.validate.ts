@@ -2,9 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import Validation from "../utils/Validation";
 
 const errorMessages = {
-  name: "Falló la verificación del nombre",
   id: "Falló la verificación del id",
+  name: "Falló la verificación del nombre",
+  price: "Falló la verificación del precio",
+  ingredients: "Falló la verificación de los ingredientes",
   picture: "Falló la verificación de la foto",
+  type: "Falló la verificación del tipo",
 };
 
 const validate: Validation = new Validation();
@@ -12,7 +15,7 @@ const validate: Validation = new Validation();
 /**
  * Esta clase verifica los parámetros enviados por el request.
  */
-class CoveragesValidate {
+class DishesValidate {
   // Metodo de verificacion por id
   static validateById(req: Request, res: Response, next: NextFunction) {
     if (verifyId(req))
@@ -34,6 +37,12 @@ class CoveragesValidate {
     if (verifyName(req))
       return res.status(400).json({ message: errorMessages.name });
 
+    if (verifyPrice(req))
+      return res.status(400).json({ message: errorMessages.price });
+
+    if (verifyIngredients(req))
+      return res.status(400).json({ message: errorMessages.ingredients });
+
     if (verifyPicture(req))
       return res.status(400).json({ message: errorMessages.picture });
 
@@ -48,11 +57,17 @@ class CoveragesValidate {
     if (verifyName(req))
       return res.status(400).json({ message: errorMessages.name });
 
+    if (verifyPrice(req))
+      return res.status(400).json({ message: errorMessages.price });
+
+    if (verifyIngredients(req))
+      return res.status(400).json({ message: errorMessages.ingredients });
+
     if (req.files) {
       if (verifyPicture(req))
         return res.status(400).json({ message: errorMessages.picture });
     }
-    
+
     next();
   }
 }
@@ -65,6 +80,16 @@ const verifyId = (req: Request) => {
 const verifyName = (req: Request) => {
   const { name } = !!req.body.name ? req.body : req.params;
   return !!!name ? true : nameVerifications(name).includes(false);
+};
+
+const verifyPrice = (req: Request) => {
+  const { price } = req.body;
+  return !!!price ? true : priceVerifications(price).includes(false);
+};
+
+const verifyIngredients = (req: Request) => {
+  const { ingredients } = req.body;
+  return !!!ingredients ? true : ingredientsVerifications(ingredients).includes(false);
 };
 
 const verifyPicture = (req: Request) => {
@@ -81,10 +106,24 @@ const idVerifications = (id: string): Array<Boolean> => [
 
 // Metodo para obtener arreglo de verificaciones de nombre.
 const nameVerifications = (name: string): Array<Boolean> => [
+  validate.verifySpecialCharacters(name),
   validate.verifyMinSize(name, 3),
   validate.verifyMaxSize(name, 25),
-  validate.verifySpecialCharacters(name),
   validate.verifyText(name),
+];
+
+// Metodo para obtener arreglo de verificaciones de precio.
+const priceVerifications = (price: string): Array<Boolean> => [
+  validate.verifyNumber(price),
+  validate.verifyPositive(parseInt(price)),
+  validate.verifyMaxNumber(parseInt(price), 25000),
+];
+
+// Metodo para obtener arreglo de verificaciones de ingredientes.
+const ingredientsVerifications = (ingredients: string): Array<Boolean> => [
+  validate.verifySpecialCharacters(ingredients),
+  validate.verifyContentIngredients(ingredients),
+  validate.verifyNumeralIngredients(ingredients),
 ];
 
 // Metodo para obtener arreglo de verificaciones de foto.
@@ -93,4 +132,4 @@ const pictureVerifications = (picture: any) => [
   validate.verifyImageType(picture.mimetype),
 ];
 
-export default CoveragesValidate;
+export default DishesValidate;

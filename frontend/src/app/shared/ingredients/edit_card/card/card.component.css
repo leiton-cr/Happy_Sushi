@@ -1,0 +1,63 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  margin: 1em;
+  min-width: 200px;
+  width: 15em;
+  max-width: 300px;
+  border-radius: 0.5em;
+  box-shadow: 0 0 10px 5px #c9c9c9;
+}
+.card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+.card__ribbon {
+  font-weight: bold;
+  color: #f0f0f0;
+  position: absolute;
+  top: 0.8em;
+  left: -2em;
+  padding: 0.2em 2em;
+  transform: rotate(-45deg);
+  background-color: var(--clr-sucess);
+  opacity: 0.8;
+}
+.card__image {
+  min-height: 100px;
+  height: 9em;
+  max-height: 150px;
+  overflow: hidden;
+}
+.card__image > * {
+  width: 300px;
+}
+.card__title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 18ch;
+  font-size: 1.5em;
+  margin: 0.5em;
+  text-align: center;
+}
+.card__actions .btn {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  border-radius: 0.3em;
+  font-size: 1.2em;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  box-shadow: 2px 2px 10px 0 #6d6d6d;
+}
+.card__actions .btn.edit {
+  color: var(--clr-warning);
+}
+.card__actions .btn.delete {
+  color: var(--clr-danger);
+}/*# sourceMappingURL=card.component.css.map */

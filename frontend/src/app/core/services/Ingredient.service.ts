@@ -2,18 +2,18 @@ import { API_URL } from '@env/environment';
 
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AbstractService } from './Abstract.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class IngredientService {
+export class IngredientService extends AbstractService{
 
   @Output() updateEmitter: EventEmitter<any> = new EventEmitter();
 
-  private loadedImages: Array<any>;
-
   constructor(private http: HttpClient) {
+    super();
     this.loadedImages = [];
   }
 
@@ -70,27 +70,6 @@ export class IngredientService {
     
       });
     }
-  }
-
-  // En caso de fallar la carga inicial reintenta tras un tiempo corto.
-  retryLoad(id: number) {
-    
-    setTimeout(() => {
-      this.destroyLoadedImage(id);
-      
-    }, 2000)
-  }
-
-  // Este método destruye una imagen precargada.
-  destroyLoadedImage(id: number) {
-    if (this.loadedImages[id]) {
-      this.loadedImages[id] = '';
-    }
-  }
-
-  // Este método obtiene una imagen precargada por su id.
-  getLoadedImage(id: number) {
-    return this.loadedImages[id];
   }
 
 }

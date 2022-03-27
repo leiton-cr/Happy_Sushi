@@ -1,4 +1,4 @@
-import sql, { MAX } from 'mssql';
+import Ingredient from '../models/Ingredient';
 
 import AbstractService from "./Abstract.service";
 
@@ -14,181 +14,180 @@ class IngredientService extends AbstractService {
 
   async listAll() {
 
-    const procedure: string = 'sp_ingredients_list_all'
-    const outputData = await this.db.obtainData([], procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener los ingredientes' }
+    try {
+      const ingredients = await Ingredient.findAll({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { state: true }
+      });
+
+      this.result = { status: 200, list: ingredients }
+
+    } catch (error) {
+      this.result = { status: 500, message: 'Surgió un error al obtener los datos' }
+
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, list: outputData.recordset }
-    }
-    return this.result = { status: 400, message: 'No hay ingredientes que mostrar' }
+
   }
 
-  async listById(id:Number) {
-   
-    const procedure: string = 'sp_ingredients_list_byId'
+  async listById(id: number) {
 
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
+    try {
+      const ingredient = await Ingredient.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener el ingrediente' }
-    }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: outputData.recordset[0] }
-    }
-    return this.result = { status: 400, message: 'El ingrediente no fue encontrado' }
-  }
-  
-  async listByName(name:String) {
-   
-    const procedure: string = 'sp_ingredients_list_byName'
+      if (!ingredient) {
+        this.result = { status: 404, message: `No se encontró el ingrediente con id ${id}` };
 
-    const inputData: Array<DataField> = [
-      { name: 'name', type: sql.VarChar(25), data: name }
-    ]
+      } else {
+        this.result = { status: 200, item: ingredient }
+      }
 
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener el ingrediente' }
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener el ingrediente` }
+
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: outputData.recordset[0] }
-    }
-    return this.result = { status: 400, message: 'El ingrediente no fue encontrado' }
   }
 
-  async listByType(type:String) {
-   
-    const procedure: string = 'sp_ingredients_list_byType';
+  async listByName(name: string) {
 
-    const inputData: Array<DataField> = [
-      { name: 'type', type: sql.VarChar(4), data: type }
-    ]
+    try {
+      const ingredient = await Ingredient.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { name: name, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure);
+      if (!ingredient) {
+        this.result = { status: 404, message: `No se encontró el ingrediente con el nombre ${name}` };
 
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al obtener los ingredientes de tipo '${type}'` }
+      } else {
+        this.result = { status: 200, item: ingredient }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener el ingrediente` }
+
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, list: outputData.recordset }
-    }
-    return this.result = { status: 400, message: `No se encontraron ingredientes de tipo '${type}'` }
   }
 
-  async delete(id:number) {
-   
-    const procedure: string = 'sp_ingredients_delete';
+  async listByType(type: string) {
 
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
+    try {
+      const ingredient = await Ingredient.findAll({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { type: type, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure);
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al eliminar el ingrediente '${id}'` }
+      if (!ingredient) {
+        this.result = { status: 404, message: `No se encontraron ingredientes con el tipo ${type}` };
+
+      } else {
+        this.result = { status: 200, list: ingredient }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener los ingredientes` }
+
+    } finally {
+      return this.result;
     }
-    
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se eliminó correctamente el ingrediente '${id}'` }
-    }
-    return this.result = { status: 400, message: `No se encontró el ingrediente '${id}' a eliminar` }
-  }
-
-  async insert(name:String, type:String, picture:Buffer) {
-   
-    const procedure: string = 'sp_ingredients_insert';
-
-    const inputData: Array<DataField> = [
-      { name: 'name', type: sql.VarChar(25), data: name },
-      { name: 'type', type: sql.VarChar(4), data: type },
-      { name: 'picture', type: sql.VarBinary(MAX), data: picture },
-    ]
-
-    const outputData = await this.db.obtainData(inputData, procedure);
-
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al registrar el ingrediente` }
-    }
- 
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se insertó correctamente el ingrediente` }
-    }
-    return this.result = { status: 400, message: `No se insertó ingrediente` }
-  }
-
-  async update(id:number, name:String, type:String, picture:Buffer) {
-   
-    const procedure = !!picture ? 'sp_ingredients_update' : 'sp_ingredients_update_pictureless';
-    
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id },
-      { name: 'name', type: sql.VarChar(25), data: name },
-      { name: 'type', type: sql.VarChar(4), data: type },
-    ]
-
-    if(!!picture) inputData.push({ name: 'picture', type: sql.VarBinary(MAX), data: picture });
-    
-    const outputData = await this.db.obtainData(inputData, procedure);
-
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al actualizar el ingrediente` }
-    }
- 
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se actualizó correctamente el ingrediente` }
-    }
-    return this.result = { status: 400, message: `No se encontró el ingrediente a actualizar` }
-  }
-
-  async imageById(id:Number) {
-   
-    const procedure: string = 'sp_ingredients_image_byId'
-
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
-
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener la imagen del ingrediente' }
-    }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: `data:image/webp;base64,${ outputData.recordset[0].picture.toString('base64')}` }
-    }
-    return this.result = { status: 400, message: 'La imagen del ingrediente no fue encontrada' }
   }
 
 
+  async insert(name: String, type:String , picture: Buffer) {
+    try {
+      const cover = Ingredient.build({ name: name, type: type, picture: picture});
+      const res = await cover.save();
+      this.result = { status: 200, item: res };
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al guardar el ingrediente` }
+
+    } finally {
+      return this.result;
+    }
+  }
+
+  async delete(id: number) {
+
+    try {
+      const ingredient = await Ingredient.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
+
+      if (ingredient) {
+
+        await ingredient.update({ state: false })
+        this.result = { status: 200, item: ingredient }
+
+      } else {
+        this.result = { status: 404, message: `No se encontró el ingrediente con id ${id}` }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al eliminar el ingrediente` }
+    } finally {
+      return this.result
+    }
+  }
+
+  async update(id: number, name: String, type: String, picture: Buffer) {
+
+    try {
+      const ingredient = await Ingredient.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
+
+      if (ingredient) {
+
+        !!picture ?
+          await ingredient.update({ name: name, picture: picture, type:type }) :
+          await ingredient.update({ name: name, type:type });
+        this.result = { status: 200, item: ingredient }
+
+      } else {
+        this.result = { status: 404, message: `No se encontró el ingrediente con id ${id}` }
+      }
+
+    } catch (error) {
+      console.log(error);
+      this.result = { status: 500, message: `Surgió un error al modificar el ingrediente` }
+
+    } finally {
+      return this.result
+    }
+  }
+
+  async imageById(id: number) {
+
+    try {
+      const ingredient: any = await Ingredient.findOne({
+        attributes: { include: ['picture'] },
+        where: { id: id, state: true }
+      });
+
+      if (!ingredient) {
+        this.result = { status: 404, message: `No se encontró el ingrediente con id ${id}` };
+
+      } else {
+        this.result = { status: 200, item: `data:image/webp;base64,${ingredient.picture.toString('base64')}` };
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener el ingrediente` }
+
+    } finally {
+      return this.result;
+    }
+  }
 }
+
 export default IngredientService;

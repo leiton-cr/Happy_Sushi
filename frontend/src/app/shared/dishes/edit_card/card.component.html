@@ -1,0 +1,48 @@
+<div class="card">
+  <input type="checkbox" id="det-{{item.id}}" class="card__checker">
+  <div class="card__content">
+    <div class="card__front">
+
+      <img src="{{getImage(item.id)}}" class="card__image" id="img-{{item.id}}" appErrorImageIngredient />
+
+
+      <p class="card__name">{{item.name}}</p>
+
+
+      <p class="card__price">{{item.price | currency:'₡'}}</p>
+
+
+      <div class="card__actions">
+
+        <label class="details__label" for="det-{{item.id}}">
+          <i class="fas fa-search btn details" title="Detalles" (click)="getDetails()"></i>
+        </label>
+
+        <i class="far fa-edit btn edit" title="Editar" (click)="onEdit(item.id)" *ngIf="editCard"></i>
+        <i class="fas fa-trash-alt btn delete" title="Eliminar" (click)="onDelete(item.id)" *ngIf="editCard"></i>
+
+      </div>
+
+
+    </div>
+
+    <div class="card__back">
+      <p class="card__name">{{item.name}}</p>
+      <ul class="card__ingredients">
+        <li *ngFor="let ingredient of ingredients">{{ingredient.name}}</li>
+      </ul>
+
+
+      <div class="card__actions">
+
+        <label class="details__label"  for="det-{{item.id}}">
+          <i class="fas fa-search btn details" title="Detalles"></i>
+        </label>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>

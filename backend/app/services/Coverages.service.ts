@@ -1,5 +1,4 @@
-import sql, { MAX } from 'mssql';
-
+import Coverage from '../models/Coverage';
 import AbstractService from "./Abstract.service";
 
 /**
@@ -8,163 +7,163 @@ import AbstractService from "./Abstract.service";
  */
 class CoveragesService extends AbstractService {
 
-  public constructor() {
-    super();
-  }
+  public constructor() { super() }
 
   async listAll() {
 
-    const procedure: string = 'sp_coverages_list_all'
-    const outputData = await this.db.obtainData([], procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener las coverturas' }
+    try {
+      const coverages = await Coverage.findAll({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { state: true }
+      });
+
+      this.result = { status: 200, list: coverages }
+
+    } catch (error) {
+      this.result = { status: 500, message: 'Surgió un error al obtener los datos' }
+
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, list: outputData.recordset }
-    }
-    return this.result = { status: 400, message: 'No hay coverturas que mostrar' }
+
   }
 
-  async listById(id:Number) {
-   
-    const procedure: string = 'sp_coverages_list_byId'
+  async listById(id: number) {
 
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
+    try {
+      const coverage = await Coverage.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener la covertura' }
-    }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: outputData.recordset[0] }
-    }
-    return this.result = { status: 400, message: 'La covertura no fue encontrada' }
-  }
-  
-  async listByName(name:String) {
-   
-    const procedure: string = 'sp_coverages_list_byName'
+      if (!coverage) {
+        this.result = { status: 404, message: `No se encontró la covertura con id ${id}` };
 
-    const inputData: Array<DataField> = [
-      { name: 'name', type: sql.VarChar(25), data: name }
-    ]
+      } else {
+        this.result = { status: 200, item: coverage }
+      }
 
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener la covertura' }
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener la covertura` }
+
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: outputData.recordset[0] }
-    }
-    return this.result = { status: 400, message: 'La covertura no fue encontrada' }
   }
 
-  async delete(id:number) {
-   
-    const procedure: string = 'sp_coverages_delete';
+  async listByName(name: string) {
 
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
+    try {
+      const coverage = await Coverage.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { name: name, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure);
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al eliminar la covertura '${id}'` }
+      if (!coverage) {
+        this.result = { status: 404, message: `No se encontró la covertura con el nombre ${name}` };
+
+      } else {
+        this.result = { status: 200, item: coverage }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener la covertura` }
+
+    } finally {
+      return this.result;
     }
-    
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se eliminó correctamente la covertura '${id}'` }
-    }
-    return this.result = { status: 400, message: `No se encontró la covertura '${id}' a eliminar` }
   }
 
-  async insert(name:String, picture:Buffer) {
-   
-    const procedure: string = 'sp_coverages_insert';
 
-    const inputData: Array<DataField> = [
-      { name: 'name', type: sql.VarChar(25), data: name },
-      { name: 'picture', type: sql.VarBinary(MAX), data: picture },
-    ]
+  async insert(name: String, picture: Buffer) {
+    try {
+      const cover = Coverage.build({ name: name, picture: picture });
+      const res = await cover.save();
+      this.result = { status: 200, item: res };
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al guardar la covertura` }
 
-    const outputData = await this.db.obtainData(inputData, procedure);
-
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al registrar la covertura` }
+    } finally {
+      return this.result;
     }
- 
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se insertó correctamente la covertura` }
-    }
-    return this.result = { status: 400, message: `No se insertó la covertura` }
   }
 
-  async update(id:number, name:String, picture:Buffer) {
-   
-    const procedure = !!picture ? 'sp_coverages_update' : 'sp_coverages_update_pictureless';
-    
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id },
-      { name: 'name', type: sql.VarChar(25), data: name }
-    ]
+  async delete(id: number) {
 
-    if(!!picture) inputData.push({ name: 'picture', type: sql.VarBinary(MAX), data: picture });
-    
-    const outputData = await this.db.obtainData(inputData, procedure);
+    try {
+      const coverage = await Coverage.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
 
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: `Surgió un error al actualizar la coverutra` }
+      if (coverage) {
+
+        await coverage.update({ state: false })
+        this.result = { status: 200, item: coverage }
+
+      } else {
+        this.result = { status: 404, message: `No se encontró la covertura con id ${id}` }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al eliminar la covertura` }
+    } finally {
+      return this.result
     }
- 
-    // Si hay datos.
-    if (outputData.rowsAffected[0] > 0) {
-      return this.result = { status: 200, message: `Se actualizó correctamente la coverutra` }
-    }
-    return this.result = { status: 400, message: `No se encontró la coverutra a actualizar` }
+
+
   }
 
-  async imageById(id:Number) {
-   
-    const procedure: string = 'sp_coverages_image_byId'
+  async update(id: number, name: String, picture: Buffer) {
 
-    const inputData: Array<DataField> = [
-      { name: 'id', type: sql.TinyInt, data: id }
-    ]
+    try {
+      const coverage = await Coverage.findOne({
+        attributes: { exclude: ['picture', 'state'] },
+        where: { id: id, state: true }
+      });
 
-    const outputData = await this.db.obtainData(inputData, procedure)
-    
-    // Si no hay datos.
-    if (!outputData) {
-      return this.result = { status: 500, message: 'Surgió un error al obtener la imagen de la covertura' }
+      if (coverage) {
+
+        !!picture ?
+          await coverage.update({ name: name, picture: picture }) :
+          await coverage.update({ name: name });
+        
+        this.result = { status: 200, item: coverage }
+
+      } else {
+        this.result = { status: 404, message: `No se encontró la covertura con id ${id}` }
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al modificar la covertura` }
+
+    } finally {
+      return this.result
     }
- 
-    // Si hay datos.
-    if (outputData.recordset.length !== 0) {
-      return this.result = { status: 200, item: `data:image/webp;base64,${ outputData.recordset[0].picture.toString('base64')}` }
-    }
-    return this.result = { status: 400, message: 'La imagen de la covertura no fue encontrada' }
   }
 
+  async imageById(id: number) {
+
+    try {
+      const coverage: any = await Coverage.findOne({
+        attributes: { include: ['picture'] },
+        where: { id: id, state: true }
+      });
+
+      if (!coverage) {
+        this.result = { status: 404, message: `No se encontró la covertura con id ${id}` };
+
+      } else {
+        this.result = { status: 200, item: `data:image/webp;base64,${coverage.picture.toString('base64')}` };
+      }
+
+    } catch (error) {
+      this.result = { status: 500, message: `Surgió un error al obtener la covertura` }
+
+    } finally {
+      return this.result;
+    }
+  }
 }
 
 export default CoveragesService;

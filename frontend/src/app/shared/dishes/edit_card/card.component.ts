@@ -1,22 +1,23 @@
-import { ToastDanger, ToastSucess } from '@core/utils/Alerts';
-import { AlertPromiseDanger } from '@core/utils/Alerts';
-import { Ingredient } from '@core/models/Ingredient';
-import { IngredientService } from '@core/services/Ingredient.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Dish } from '@core/models/Dish';
+import { DishService } from '@core/services/Dish.service';
+import { AlertPromiseDanger, ToastDanger, ToastSucess } from '@core/utils/Alerts';
 
 @Component({
-  selector: 'edit-ingredient-card',
+  selector: 'edit-dish-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-
-export class IngredientCardComponent implements OnInit {
-  @Input() item!: Ingredient;
+export class DishCardComponent implements OnInit {
+  @Input() item!: Dish;
   @Input() editCard!: Boolean;
 
   @Output() editing: EventEmitter<any> = new EventEmitter();
+  public ingredients: Array<any>;
 
-  constructor(private service: IngredientService) { }
+  constructor(private service: DishService) { 
+    this.ingredients = [];
+  }
 
   ngOnInit(): void { }
 
@@ -58,9 +59,21 @@ export class IngredientCardComponent implements OnInit {
     this.emmitEdit(id);
   }
 
-  // Emite orden a elemento padre para indicar edicion de un elemento.
+  // Emite orden a padre para indicar edicion de un elemento.
   emmitEdit(id:Number){
     this.service.updateEmitter.emit({ modified: id })
+  }
+
+  getDetails(){
+    this.getIngredients();
+  }
+
+  async getIngredients(){
+    console.log(123);
+    if(this.ingredients.length === 0 && this.item.id){
+      const res:any = await this.service.getIngredients(this.item.id);
+      this.ingredients = res.list;
+    }
   }
 
 }

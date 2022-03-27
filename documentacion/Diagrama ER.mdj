@@ -1092,12 +1092,12 @@
 										},
 										{
 											"_type": "ERDColumnView",
-											"_id": "AAAAAAF9qzxS0ImPL5k=",
+											"_id": "AAAAAAF9qzyBxomWTvo=",
 											"_parent": {
 												"$ref": "AAAAAAF9quvd0YJ5MDk="
 											},
 											"model": {
-												"$ref": "AAAAAAF9qzxSyImMxnU="
+												"$ref": "AAAAAAF9qzyBvomTF94="
 											},
 											"font": "Arial;13;0",
 											"left": 1925,
@@ -1107,12 +1107,12 @@
 										},
 										{
 											"_type": "ERDColumnView",
-											"_id": "AAAAAAF9qzyBxomWTvo=",
+											"_id": "AAAAAAF9qzxS0ImPL5k=",
 											"_parent": {
 												"$ref": "AAAAAAF9quvd0YJ5MDk="
 											},
 											"model": {
-												"$ref": "AAAAAAF9qzyBvomTF94="
+												"$ref": "AAAAAAF9qzxSyImMxnU="
 											},
 											"font": "Arial;13;0",
 											"left": 1925,
@@ -3972,22 +3972,22 @@
 						},
 						{
 							"_type": "ERDColumn",
-							"_id": "AAAAAAF9qzxSyImMxnU=",
-							"_parent": {
-								"$ref": "AAAAAAF9quvd0IJ1IBc="
-							},
-							"name": "state",
-							"type": "BIT",
-							"length": 0
-						},
-						{
-							"_type": "ERDColumn",
 							"_id": "AAAAAAF9qzyBvomTF94=",
 							"_parent": {
 								"$ref": "AAAAAAF9quvd0IJ1IBc="
 							},
 							"name": "price",
 							"type": "INT",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAF9qzxSyImMxnU=",
+							"_parent": {
+								"$ref": "AAAAAAF9quvd0IJ1IBc="
+							},
+							"name": "state",
+							"type": "BIT",
 							"length": 0
 						}
 					]

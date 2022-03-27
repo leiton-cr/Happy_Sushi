@@ -11,6 +11,7 @@
 -- 06. sp_dishes_update_pictureless
 -- 07. sp_dishes_image_byId
 -- 08. sp_dishes_list_byName
+-- 09. sp_dishes_list_ingredients
 
 -- =================================================
 
@@ -25,7 +26,7 @@ CREATE OR ALTER PROCEDURE sp_dishes_list_all
 AS
 	BEGIN
 		SET NOCOUNT ON;
-		SELECT [id],[name],[price],[picture] FROM tb_dishes
+		SELECT [id],[name],[price] FROM tb_dishes
 		WHERE [state] = 1 AND [id] NOT IN (SELECT [id] from tb_rolls)
 	END
 GO
@@ -44,7 +45,7 @@ CREATE OR ALTER PROCEDURE sp_dishes_list_byId (
 AS
 	BEGIN
 		SET NOCOUNT ON;
-		SELECT [id],[name],[price],[picture] FROM tb_dishes
+		SELECT [id],[name],[price] FROM tb_dishes
 		WHERE [state] = 1 
 		AND [id] = @id
 		AND [id] NOT IN (SELECT [id] from tb_rolls)
@@ -193,6 +194,27 @@ AS
 		SELECT [id],[name],[price] FROM tb_dishes
 		WHERE [state] = 1 
 		AND [name] = @name 
+	END
+GO
+---------------------------------------------------------
+
+GO
+-- ====================================================
+-- 09. sp_dishes_list_ingredients
+--
+-- Description:	<Obtencion deingredientes de platillo segun id>
+-- ====================================================
+CREATE OR ALTER PROCEDURE sp_dishes_list_ingredients (
+	@id SMALLINT
+)
+
+AS
+	BEGIN
+		SET NOCOUNT ON;
+		SELECT i.[id], i.[name] FROM tb_ingredients as i 
+		inner join tb_ingredients_dishes as r
+		on i.[id] = r.[ingredient_id]
+		WHERE r.[dish_id] = @id 
 	END
 GO
 ---------------------------------------------------------

@@ -53,10 +53,12 @@ class AuthController {
   // Metodo de actualizacion de ingrediente
   async imageById(req: Request, res: Response) {
     const { id } = req.params;
-
     const data: ServiceResult = await service.imageById(parseInt(id));
     res.status(data.status).json(data);
   }
+
+
+
 }
 
 export default AuthController;

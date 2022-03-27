@@ -24,6 +24,8 @@
     "express-fileupload": "^1.2.1",
     "morgan": "^1.10.0",
     "mssql": "^7.3.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "sequelize": "^6.12.5",
+    "tedious": "^14.0.0"
   }
 }

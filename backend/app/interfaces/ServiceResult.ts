@@ -3,7 +3,6 @@
   */
 interface ServiceResult {
 
-  status: number, 
   message?: string,
   list?: Array<any>,
   item?: any

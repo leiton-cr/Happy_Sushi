@@ -1,0 +1,192 @@
+.form__container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.205);
+    position: fixed;
+  }
+  
+  .formulary{
+    background-color: rgb(240, 240, 240);
+    max-width: 300px;
+    width: calc(19em + 50px);
+    min-width: 200px;
+    border-radius: 1em;
+    box-shadow: 0 0 10px 5px rgb(201, 201, 201);
+  
+    &__group{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+  
+      & .image_error_input{
+        background-color: var(--clr-danger);
+        text-align: center;
+        color: snow;
+        position: absolute;
+        bottom: 5.5em;
+        width: 85%;
+        padding: .5em;
+        border-radius: 0 0 .5em .5em;
+        font-size: .8em;
+        transform: scaleY(0);
+        animation: alert_error 1s forwards;
+        transform-origin: bottom;
+      }
+  
+      @keyframes alert_error{
+        0% {transform: scaleY(0);}
+        100% {transform: scaleY(1);}
+      }
+  
+      & .name__label{
+        position: absolute;
+        top: .5em;
+        left: .5em;
+        transform: translate(-.8em, -1.5em) scale(.9);
+        transition: transform 250ms;
+      }
+  
+      & .formulary__input:placeholder-shown + .name__label{
+       transform: translate(0, 0) scale(1);
+      }
+  
+      & .formulary__input:focus + .name__label{
+        transform: translate(-.8em, -1.5em) scale(.9);
+       }
+  
+      & .error_input{
+        font-size: .8em;
+        margin: 0;
+        position: absolute;
+        right: 1em;
+        bottom: 1em;
+        color: var(--clr-danger);
+      }
+    }
+  
+    &__content{
+      padding: 1em;
+    }
+  
+    &__select, 
+    &__input{
+      width: 100%;
+      padding: .5em;
+      outline: none;
+      font-size: 1em;
+      margin-bottom: 2em;
+      border: none;
+      box-shadow: 2px 2px 10px 0  rgb(109, 109, 109);
+      border-radius: .2em;
+    }
+  
+    &__image{
+      
+      height: 10em;
+      width: 14em;
+      overflow: hidden;
+      border-radius: .5em;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      background-color: snow;
+      object-fit: cover;
+     
+  
+      &__input{
+        display: none;
+      }
+  
+      &__select{
+        cursor: pointer;
+        border-radius: .3em;
+        display: inline-block;
+        margin:  1em 0 2em 0;
+        padding: .5em;
+        width: 15ch;
+        text-align: center;
+        box-shadow: 2px 2px 10px 0  rgb(109, 109, 109);
+  
+        & > .upload{
+          font-size: 1.2em;
+          color: var(--clr-sucess);
+        }
+  
+        & > .label{
+          color: var(--clr-sucess);
+        }
+      }
+    }
+  
+    &__close{
+      color: var(--clr-danger);
+      position: relative;
+      font-size: 1.5em;
+      margin-left: 85%;
+      margin-top: .5em;
+      cursor: pointer;
+    }
+  }
+  
+  button{
+    cursor: pointer;
+    border-radius: .3em;
+    margin:  1em 0 2em 0;
+    padding: .5em;
+    box-shadow: 2px 2px 10px 0  rgb(109, 109, 109);
+    border: none;
+    font-size: 1em;
+    background-color: var(--clr-sucess);
+    color: white;
+    font-weight: bold;
+    margin-left: auto;
+    width: 80%;
+    margin-left: 10%;
+  }
+  
+  .form__container.modal__appear{
+    animation: modal_appear 400ms forwards linear;
+  }
+  
+  .form__container.modal__disappear{
+    animation: modal_disappear 400ms forwards linear;
+    pointer-events: none;
+    cursor: default;
+  }
+  
+  @keyframes modal_appear{
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  @keyframes modal_disappear{
+    from {opacity: 1;}
+    to {opacity: 0;}
+  }
+  
+  .form__container.modal__appear > .formulary{
+    animation: container_appear 400ms forwards linear;
+  }
+  
+  .form__container.modal__disappear > .formulary{
+    animation: container_disappear 400ms forwards linear;
+  }
+  
+  @keyframes container_appear{
+    from {transform: translate(0, -10em);}
+    to {transform: translate(0 0);}
+  }
+  
+  @keyframes container_disappear{
+    from {transform: translate(0 0);}
+    to {transform: translate(0, -10em);}
+  }

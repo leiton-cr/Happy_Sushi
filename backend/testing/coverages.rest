@@ -6,7 +6,7 @@
 GET {{host}}/coverages
 
 ###
-GET {{host}}/coverages/1
+GET {{host}}/coverages/2
 
 ###
 DELETE {{host}}/coverages/1

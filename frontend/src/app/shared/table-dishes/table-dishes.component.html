@@ -1,0 +1,10 @@
+<button (click)="openModal(false)">Agregar</button>
+
+<div class='card__container' >
+
+    <h2 *ngIf="list.length === 0"> La lista de platillos está vacía. </h2>
+
+    <edit-dish-card *ngFor="let item of list" [item]='item' [editCard]='true'></edit-dish-card>
+</div>
+
+<app-dish-formulary [opened]='opened' [modifyId]='modifyId' (closing)="openModal($event)" *ngIf="opened"></app-dish-formulary>
